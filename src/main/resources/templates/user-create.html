@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>User page</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+</head>
+<body>
+<h2>Сreating a new User</h2>
+<br/>
+<form action="#" th:action="@{/admin/user-create}" th:object="${adduser}" method="POST">
+
+    <label for="username">First Name</label>
+    <input type="text" th:field="*{username}" id="username" placeholder="User Name">
+
+    <label for="lastname">Last Name</label>
+    <input type="text" th:field="*{lastname}" id="lastname" placeholder="Last name">
+
+    <label for="userEmail">Email</label>
+    <input type="text" th:field="*{email}" id="userEmail" placeholder="Email">
+
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password" placeholder="Password">
+
+    <tr><td> <label>Select Roles:</label>
+        <select name="roles" id="roles" multiple="multiple" size="2">
+            <div th:each="role : ${roles}">
+                <option th:text="${role.getName()}" th:value="${role.getId()}"/>
+            </div>
+        </select>
+    </td></tr>
+
+    <input type="submit" value="Create User">
+</form>
+</form>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout"/>
+</form>
+</body>
+</html>
