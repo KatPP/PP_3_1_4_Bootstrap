@@ -9,7 +9,5 @@ public interface UserService {
     void saveUser(User user);
     void deleteById(Long id);
     User findByUsername(String username);
-    User findByEmail(String email);
 
-    void updateUserById(Long id, User user);
 }

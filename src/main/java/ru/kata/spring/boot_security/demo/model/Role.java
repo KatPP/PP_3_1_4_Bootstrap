@@ -1,17 +1,17 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import lombok.Data;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import java.util.Objects;
 
 
 @Entity
-
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name = "role")
 public class Role implements GrantedAuthority {
 
@@ -35,16 +35,21 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+    public String getNoPrefix() {
+        String pr = "ROLE_";
+        return name.substring(pr.length());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Role)) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) && Objects.equals(name, role.name);
+        return id != null && Objects.equals(id, role.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return getClass().hashCode();
     }
 }

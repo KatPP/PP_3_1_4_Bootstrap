@@ -1,7 +1,8 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +19,9 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString
 public class User implements UserDetails {
 
     @Id
@@ -32,7 +35,10 @@ public class User implements UserDetails {
     @Column(name = "lastname")
     private String lastname;
 
-    @Column(name = "email")
+    @Column(name = "age")
+    private int age;
+
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
@@ -46,14 +52,16 @@ public class User implements UserDetails {
 
     )
     @Fetch(FetchMode.JOIN)
+    @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String username, String lastname, String email, String password) {
+    public User(String username, String lastname, int age, String email, String password) {
         this.username = username;
         this.lastname = lastname;
+        this.age = age;
         this.email = email;
         this.password = password;
 
@@ -93,28 +101,21 @@ public class User implements UserDetails {
         roles.add(role);
     }
 
+    public String roleString() {
+        return roles.stream().map(role -> role.getName().replace("ROLE_", ""))
+                .collect(Collectors.joining(" "));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(lastname, user.lastname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+        return id != null && Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, lastname, email, password, roles);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
+        return getClass().hashCode();
     }
 }

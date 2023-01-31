@@ -22,8 +22,7 @@ public class UserController {
     public String viewUser(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
         model.addAttribute("user", user);
-        System.out.println(principal.getName());
-        return "index";
+        return "view2";
     }
 
 }

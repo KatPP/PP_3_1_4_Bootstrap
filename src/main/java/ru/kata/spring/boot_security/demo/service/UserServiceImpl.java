@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepository.findAll();
     }
 
-
     @Transactional
     public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -48,19 +47,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
+    @org.springframework.transaction.annotation.Transactional
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
-    }
-
-    @Override
-    public void updateUserById(Long id, User user) {
-        user.setId(id);
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        return userRepository.findByUsername(login);
     }
 }
